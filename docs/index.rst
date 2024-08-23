@@ -10,4 +10,5 @@ Read through the below documents:
    :maxdepth: 2
 
    glossary
+   firstcontactsop
    vpnsop
