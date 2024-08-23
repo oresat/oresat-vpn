@@ -1,0 +1,107 @@
+========================
+PSAS SOP - First Contact
+========================
+
+Purpose
+
+Describe the procedure needed to make our first contact with an OreSat.
+
+Standards and References
+
+- Like the CDS, etc.
+
+Acronyms and Terms
+
+- AOS / LOS – Acquisition/Loss Of Signal
+- TLE – Two-Line Element - specific format of Keplerian Elements
+- Keps or Keplerian Elements – numerical representation of elliptical orbit
+- FlatSat  – The lab testing environment of the satellite
+- AHITL  –  Advanced Hardware In The Loop testing environment using FlatSat
+- Hosts (the actual hostname in some instances)  at this time that have been in discussions and documents. The highlighted hosts are expected for First Contact.
+  - EB-UniClOGS-v1   –  The existing ground station on the Engineering Building
+  - EB-UniClOGS-v2   –  New station being built on Engineering Building
+  - KJ7SU-UniClOGS   –  Ground station at Glenn’s house
+  - UniClOGS-Server   –  Server in PSAS Lab with tons of storage
+  - FlatClOGS  –  Closed circuit ground station on FlatSat which includes AHITL
+- YAMCS  –  
+- UniClOGS-VLAN  – The network inside the Engineering Building forming the UniClOGS network
+- UniClOGS-VPN  –  Access from the Internet into the UniClOGS network
+
+Notes/Issues (Scribble Zone)
+
+- Pre-launch Prep
+  - RF research
+    - What else is deploying, and what are their frequencies?
+    - Prep for post-launch observations with our Cluster of Satellites
+  - State Vector → TLE conversion
+    - Come up with a SV → TLE conversion
+    - Compare with STK from Dmitri
+    - And see how cool we are: if not, just use STK
+    - Notes: State vector from LP
+      - Deployment time
+      - x, y, z coord
+      - STK - > TLE w perturbation model gives a ~ 3-day estimate
+  - UniClOGS HW/SW bringup
+    - EB-UniClOGS-v1
+      - Swap out rotator, B200 boot issue, install new radio host, test, VPN bridge
+      - Has capacity for IQ storage (~ 7 TBs?)
+    - KJ7SU-UniClOGS
+      - UHF receive issue, possible VPN issue, comms test, more storage for IQ data
+- Satnogs Prep
+  - “Suggest a satellite to add” - Create OreSat0.5 in db.satnogs.org
+    - Auto-generates temp norad id
+  - Prep SatNOGS beacon decoder
+    - Establish flight version (“truth”) for beacon (v0.7.2 tag for oresat-configs OreSat0.5 for example)
+      - Also version 0.5.0 of oresat-c3-software
+    - Generate Kaitai struct (like XTCE, just a different standard) from oresat-configs custom yaml (same yaml used to generate XTCE for Yamcs,  DCF’s for CAN including SavyCAN)
+  - Open an issue to add beacon decoder to satnogs-decoders
+- L-2 days
+  - LP gives us a new Re-test of SV → TLE conversion against STK
+- L-0 days
+  - LP gives us actual Orbital Parameters Message (state vector)
+    - Convert OPM to first-Contact TLE
+    - Update SatNOGS with this TLE
+  - Start pinging 18th Space space-track.org/celestrak.org for possible NORAD IDs.
+    - Eventually, when we’re sure, update SatNOGS with NORAD ID.
+  - Post to SatNOGS forum: https://community.libre.space/c/satellites-observations/16
+    - “Community connection:” Let SatNOGS folks know in the forums that we’re deploying
+    - Monitor SatNOGS forum to see if amateurs can pick up/identify OreSat
+  - Start UniCloGS RF observations
+    - Get waterfall on our frequency (baudline), and get our beacon
+    - Keep IQ data and pass it through strf (see below)
+    - Try to decode beacons because why not
+- L+N (In order, soft dates)
+  - Receive HK TLM (“get the god damn beacons”)
+    - Requires Satnogs Init
+  - Ping with EDL
+    - Requires EB-UniClOGS-v1 or KJ7SU-UniClOGS
+    - Using Python Scripts
+
+Procedure
+
+1. Our launch services provider (LSP) gives us an Orbital Parameter Message (OPM) with the satellite state vector at time of deployment.
+2. Convert OPM to TLE
+    a. How?
+3. Give TLE to SatNOGS
+    a. How? When?
+4. Monitor SatNOGS to get our first data packets
+    a. How? Incomplete, random thoughts which should be formatted better:
+        i. Find the temporary NORAD ID assigned by SatNOGS (after “Suggest New Satellite” at https://db.satnogs.org/)
+        ii. https://network.satnogs.org/observations/?bad=0&failed=0&norad=52017 but replace 52017 with the temporary ID assigned to OreSat0.5
+        iii. Observations which include audio can be post-processesd to extract data. sox->direwolf will extract frames that the SatNOGS auto data processor misses
+5. Get UniClOGS ready to grab data packets for upcoming passes
+    a. When? How?
+6. Identify NORAID ID
+    a. Watch the CelesTrak element list for this launch and attempt to discern which elements most closely match observations, periodically update SatNOGS
+    b. Elements for objects launched with OreSat0 were listed at https://celestrak.org/NORAD/elements/gp.php?INTDES=2022-026
+    c. Depending on the mass and quantity of deployed objects, it may take weeks for orbits to diverge enough to distinguish which object is ours. STRF can help us analyze observations before 18th-Space makes a formal determination.
+
+Change Log
+Date: 2024-06-27
+Ver: 1
+Changes: Created document
+
+
+
+
+

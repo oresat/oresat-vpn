@@ -12,4 +12,3 @@ Read through the below documents:
    glossary
    firstcontactsop
    vpnsop
-   
